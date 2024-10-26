@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\Controller\UserCreateAction;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,9 +28,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['id'])]
 #[ApiFilter(DateFilter::class, properties: ['createdAt'])]
+
 #[ApiResource(
     operations: [
         new GetCollection(),
+        new Post(
+            uriTemplate: 'users/my',
+            controller: UserCreateAction::class,
+            name: 'createUser'
+        ),
         new Get(),
         new Delete()
     ],
@@ -36,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['user:write']],
     paginationItemsPerPage: 5
 )]
-class User
+class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -77,6 +85,11 @@ class User
     #[ORM\Column]
     #[Groups(['user:read', 'user:write'])]
     private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable(); // Yaratilgan vaqtni avtomatik belgilang
+    }
 
     public function getId(): ?int
     {
