@@ -15,12 +15,10 @@ use App\Controller\UserCreateAction;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity("email", message: "Bu {{ value }} email oldin ro'yxatdan o'tgan")]
 #[ApiFilter(SearchFilter::class, properties: [
     'id' => 'exact',
     'email' => 'partial',
@@ -83,7 +81,7 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     private array $roles = ["ROLE_USER"];
 
     #[ORM\Column]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()

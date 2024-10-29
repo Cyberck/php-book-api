@@ -2,19 +2,19 @@ api_platform:
     title: Book API Platform
     version: 1.0.0
     formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
         # multipart: ['multipart/form-data']
-            jsonld: [ 'application/ld+json' ]
-            json: [ 'application/json' ]
-            html: [ 'text/html' ]
     docs_formats:
         jsonld: ['application/ld+json']
-        jsonopenapi: ['application/vnd.openai+json']
+        jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
     defaults:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
-            standart_put: true
+            standard_put: true  # to'g'ri nom
             rfc_7807_compliant_errors: true
     use_symfony_listeners: true
