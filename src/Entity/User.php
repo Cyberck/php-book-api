@@ -16,6 +16,7 @@ use App\Controller\UserCreateAction;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -41,6 +42,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: FullNameDto::class,
             name: 'fullName'
         ),
+        new Post(
+            uriTemplate: 'users/auth',
+            name: 'auth'
+        ),
         new Get(),
         new Delete()
     ],
@@ -48,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['user:write']],
     paginationItemsPerPage: 5
 )]
-class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
+class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -182,5 +187,16 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        // TODO: Implement getUserIdentifier() method.
+        return $this->getEmail();
     }
 }
