@@ -4,10 +4,16 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Book>
+ *
+ * @method Book|null find(mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null)
+ * @method Book|null findOneBy(array $criteria, ?array $orderBy = null)
+ * @method Book[]    findAll()
+ * @method Book[]    findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  */
 class BookRepository extends ServiceEntityRepository
 {

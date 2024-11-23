@@ -1,8 +1,14 @@
 <?php
 
 namespace App\Entity;
-
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\GetBooksByCategoryAction;
+use App\Controller\GetBooksByHardExampleAction;
 use App\Repository\BookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +16,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: 'books/by-category',
+            controller: GetBooksByCategoryAction::class,
+            name: 'getBooks'
+        ),
+        new GetCollection(
+            uriTemplate: 'books/hard-example',
+            controller: GetBooksByHardExampleAction::class,
+            name: 'booksHardExample'
+        ),
+        new GetCollection(),
+        new Post(),
+        new Put(),
+        new Get(),
+        new Delete()
+    ],
     normalizationContext: ['groups' => ['book:read']],
     denormalizationContext: ['groups' => ['book:write']]
 )]
