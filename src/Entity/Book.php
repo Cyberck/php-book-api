@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
+
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Parameter;
 use App\Controller\GetBooksByCategoryAction;
 use App\Controller\GetBooksByHardExampleAction;
 use App\Repository\BookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\OpenApi\Model\Operation as OpenApiOperation;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
@@ -20,6 +25,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             uriTemplate: 'books/by-category',
             controller: GetBooksByCategoryAction::class,
+            openapi: new OpenApiOperation(
+              summary: 'Get books by category',
+              parameters: [
+                  new Parameter(
+                    name: 'categoryId',
+                    in: 'query',
+                    description: 'Id of the category',
+                    required: false,
+                    schema: ['type' => 'integer']
+                  )
+                ]
+            ),
             name: 'getBooks'
         ),
         new GetCollection(

@@ -8,15 +8,19 @@ use App\Entity\Book;
 use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class GetBooksByCategoryAction extends AbstractController
 {
-    public function __invoke(Request $request, BookRepository $bookRepository): void
+    public function __invoke(Request $request, BookRepository $bookRepository): array
     {
-        $categoryId = $request->get("categoryId");
+        $categoryId = $request->query->get("categoryId");
 
-        var_dump($categoryId);
-        exit;
+        if (!$categoryId) {
+            throw new BadRequestHttpException('Kategoriya idsi kiritilishi shart!!!');
+        }
+
+        return $bookRepository->findBy(['category' => (int) $categoryId]);
     }
 
 }
